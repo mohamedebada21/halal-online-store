@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halal Online Store - Partnership Opportunity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony Neutrals with Green Accent -->
+    <!-- Application Structure Plan: The application transforms the linear pitch deck into a single-page, scrollable narrative with a fixed top navigation. This structure allows a potential partner to either follow the story logically by scrolling or jump directly to sections of interest like 'The Product' or 'The Ask'. Key interactions include a clickable ecosystem diagram, a tabbed interface for product features, and an interactive roadmap chart. This design was chosen to make the business plan feel more tangible and dynamic, encouraging exploration over passive viewing and better reflecting a modern tech company's vision. -->
+    <!-- Visualization & Content Choices: 
+        - Market Opportunity ($2T): Goal: Impact -> Viz: Animated Number Counter -> Interaction: On-scroll trigger -> Justification: More dynamic and memorable than static text.
+        - 3-Sided Marketplace: Goal: Organize/Explain -> Viz: HTML/CSS/JS Diagram -> Interaction: Click on roles (Customer, Restaurant, Driver) to reveal details -> Justification: Encourages user interaction and clarifies the relationship between the three user groups more effectively than a static image.
+        - Product MVP Features: Goal: Inform/Organize -> Viz: Tabbed Interface -> Interaction: Click tabs to switch between Customer, Restaurant, and Driver features -> Justification: Neatly organizes complex information and allows the user to focus on one aspect of the product at a time.
+        - Business Model: Goal: Inform -> Viz: Styled Cards -> Interaction: On-scroll fade-in animation -> Justification: Adds visual polish and breaks up text-heavy sections.
+        - 12-Month Roadmap: Goal: Show Change/Plan -> Viz: Chart.js Horizontal Bar Chart (Gantt-style) -> Interaction: Hover tooltips for details -> Justification: Provides a clear, visual, and professional representation of the project timeline, which is easier to understand than a bulleted list.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc; /* bg-gray-50 */
+        }
+        .active-nav {
+            color: #06C167;
+            font-weight: 600;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .tab-active {
+            border-color: #06C167;
+            background-color: #06C167;
+            color: white;
+        }
+        .tab-inactive {
+            border-color: #e5e7eb;
+            background-color: #ffffff;
+            color: #374151;
+        }
+        .diagram-node {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .diagram-node.selected {
+            background-color: #06C167 !important;
+            color: white !important;
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .diagram-line {
+            position: absolute;
+            background-color: #d1d5db;
+            transform-origin: left center;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#home" class="text-2xl font-bold text-gray-900">Halal <span class="text-[#06C167]">Online Store</span></a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#opportunity" class="nav-link text-gray-600 hover:text-[#06C167] transition-colors">Opportunity</a>
+                <a href="#solution" class="nav-link text-gray-600 hover:text-[#06C167] transition-colors">Solution</a>
+                <a href="#product" class="nav-link text-gray-600 hover:text-[#06C167] transition-colors">Product</a>
+                <a href="#model" class="nav-link text-gray-600 hover:text-[#06C167] transition-colors">Model</a>
+                <a href="#roadmap" class="nav-link text-gray-600 hover:text-[#06C167] transition-colors">Roadmap</a>
+                <a href="#partner" class="nav-link text-gray-600 hover:text-[#06C167] transition-colors">Partner</a>
+            </div>
+            <a href="#partner" class="hidden md:block bg-[#06C167] text-white font-semibold px-5 py-2 rounded-full hover:bg-green-700 transition-colors">
+                The Ask
+            </a>
+            <button id="mobile-menu-button" class="md:hidden p-2 text-3xl font-bold text-gray-700">☰</button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4 space-y-2">
+            <a href="#opportunity" class="block nav-link text-gray-600 hover:text-[#06C167]">Opportunity</a>
+            <a href="#solution" class="block nav-link text-gray-600 hover:text-[#06C167]">Solution</a>
+            <a href="#product" class="block nav-link text-gray-600 hover:text-[#06C167]">Product</a>
+            <a href="#model" class="block nav-link text-gray-600 hover:text-[#06C167]">Model</a>
+            <a href="#roadmap" class="block nav-link text-gray-600 hover:text-[#06C167]">Roadmap</a>
+            <a href="#partner" class="block nav-link text-gray-600 hover:text-[#06C167]">Partner</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="relative min-h-[60vh] md:min-h-[80vh] flex items-center bg-cover bg-center" style="background-image: url('https://placehold.co/1600x900/000000/FFFFFF?text=Delicious+Halal+Food');">
+            <div class="absolute inset-0 bg-black/60"></div>
+            <div class="container mx-auto px-6 text-center relative z-10">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-white leading-tight">Halal Online Store</h1>
+                <p class="text-xl md:text-2xl text-gray-200 mt-4">Connecting Communities Through Food.</p>
+                <p class="text-lg text-gray-300 mt-6 font-light">An Interactive Partnership Opportunity</p>
+                <a href="#opportunity" class="mt-8 inline-block bg-[#06C167] text-white font-bold text-lg px-8 py-4 rounded-full hover:bg-green-700 transition-transform hover:scale-105">Explore the Vision</a>
+            </div>
+        </section>
+
+        <section id="opportunity" class="py-20 md:py-28 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900">The Gap in the Market</h2>
+                    <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">We're addressing a clear and unmet need for both consumers and restaurants in a massive, underserved market.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-10 items-center">
+                    <div class="space-y-8">
+                        <div class="p-8 bg-gray-50 rounded-2xl shadow-sm">
+                            <h3 class="text-2xl font-bold mb-3">The Problem for Customers</h3>
+                            <p class="text-gray-700 leading-relaxed">Finding authentic, <span class="font-semibold text-[#06C167]">verified</span> Halal food is a challenge. Consumers waste time searching across multiple apps and websites, often with no guarantee of compliance.</p>
+                        </div>
+                        <div class="p-8 bg-gray-50 rounded-2xl shadow-sm">
+                            <h3 class="text-2xl font-bold mb-3">The Problem for Restaurants</h3>
+                            <p class="text-gray-700 leading-relaxed">Independent Halal restaurants struggle to reach their target audience effectively and lack the technology to compete with larger chains.</p>
+                        </div>
+                    </div>
+                    <div class="text-center p-8 md:p-12 bg-gray-900 rounded-3xl shadow-2xl">
+                        <p class="text-2xl text-gray-300 font-light mb-2">Global Halal Food Market</p>
+                        <p class="text-6xl md:text-8xl font-extrabold text-white" id="market-value">0</p>
+                        <p class="text-3xl font-bold text-[#06C167]">Trillion</p>
+                        <p class="text-lg text-gray-400 mt-4">A rapidly growing industry with a clear demand for a trusted, digital platform.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solution" class="py-20 md:py-28">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900">A Seamless Three-Sided Marketplace</h2>
+                    <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">We are building a user-friendly ecosystem built on Trust, Convenience, and Community. Click on each role to learn more about how they fit into our platform.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div id="diagram-container" class="relative h-96 flex items-center justify-center">
+                        <div class="diagram-node selected flex items-center justify-center w-36 h-36 md:w-48 md:h-48 rounded-full bg-white shadow-lg border-4 border-gray-200" data-target="platform">
+                            <div class="text-center">
+                                <span class="text-xl md:text-2xl font-bold">Halal Online Store</span>
+                                <span class="block text-sm">Platform</span>
+                            </div>
+                        </div>
+                        <div class="diagram-node absolute flex items-center justify-center w-28 h-28 md:w-36 md:h-36 rounded-full bg-white shadow-md border-2 border-gray-200" style="top: -2rem; left: 50%; transform: translateX(-50%) translateY(-25%);" data-target="customers">
+                            <span class="font-semibold text-lg">Customers</span>
+                        </div>
+                        <div class="diagram-node absolute flex items-center justify-center w-28 h-28 md:w-36 md:h-36 rounded-full bg-white shadow-md border-2 border-gray-200" style="bottom: 0; left: 0; transform: translateY(15%);" data-target="restaurants">
+                            <span class="font-semibold text-lg">Restaurants</span>
+                        </div>
+                        <div class="diagram-node absolute flex items-center justify-center w-28 h-28 md:w-36 md:h-36 rounded-full bg-white shadow-md border-2 border-gray-200" style="bottom: 0; right: 0; transform: translateY(15%);" data-target="drivers">
+                             <span class="font-semibold text-lg">Drivers</span>
+                        </div>
+                    </div>
+                    <div id="diagram-content" class="min-h-[250px] p-8 bg-white rounded-2xl shadow-lg transition-all duration-300">
+                        <div class="content-panel" data-id="platform">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">The Central Hub</h3>
+                            <p class="text-gray-700">Our platform is the core engine, connecting all three user groups with powerful technology for seamless discovery, ordering, and delivery management.</p>
+                        </div>
+                         <div class="content-panel hidden" data-id="customers">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">For Customers</h3>
+                            <p class="text-gray-700">An easy-to-use app to discover, order, and track authentic Halal food from a curated selection of verified local restaurants.</p>
+                        </div>
+                         <div class="content-panel hidden" data-id="restaurants">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">For Restaurants</h3>
+                            <p class="text-gray-700">A powerful dashboard to manage orders, update menus in real-time, and access a wider customer base to grow their business.</p>
+                        </div>
+                         <div class="content-panel hidden" data-id="drivers">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">For Delivery Partners</h3>
+                            <p class="text-gray-700">A flexible opportunity to earn income by connecting restaurants with hungry customers, with optimized routes and transparent earnings.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="product" class="py-20 md:py-28 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900">The Product MVP</h2>
+                    <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">Our Minimum Viable Product focuses on delivering core value to each user group. This is a look at the essential features that make our ecosystem work from day one.</p>
+                </div>
+                <div class="max-w-4xl mx-auto">
+                    <div class="flex justify-center border-b border-gray-200 mb-8">
+                        <button class="product-tab tab-active px-6 py-3 font-semibold text-lg" data-target="customer-app">Customer App</button>
+                        <button class="product-tab tab-inactive px-6 py-3 font-semibold text-lg" data-target="restaurant-app">Restaurant Dashboard</button>
+                        <button class="product-tab tab-inactive px-6 py-3 font-semibold text-lg" data-target="driver-app">Driver App</button>
+                    </div>
+                    <div id="product-content">
+                        <div class="product-panel" id="customer-app-content">
+                            <div class="grid md:grid-cols-2 gap-8 items-center p-6">
+                                <div class="bg-gray-100 rounded-lg p-6">
+                                    <h3 class="text-2xl font-bold mb-4">The Customer Experience: Simple & Trusted</h3>
+                                    <ul class="space-y-3 text-gray-700">
+                                        <li class="flex items-start"><span class="text-[#06C167] font-bold mr-2 mt-1">✓</span><span><strong class="text-gray-800">GPS-Powered Discovery:</strong> Automatically find nearby Halal restaurants.</span></li>
+                                        <li class="flex items-start"><span class="text-[#06C167] font-bold mr-2 mt-1">✓</span><span><strong class="text-gray-800">Verified & Filterable:</strong> Search by cuisine, rating, and our own "Halal Online Store Certified" badge.</span></li>
+                                        <li class="flex items-start"><span class="text-[#06C167] font-bold mr-2 mt-1">✓</span><span><strong class="text-gray-800">Visual Menus:</strong> High-resolution photos make ordering irresistible.</span></li>
+                                        <li class="flex items-start"><span class="text-[#06C167] font-bold mr-2 mt-1">✓</span><span><strong class="text-gray-800">Seamless Checkout:</strong> Secure payments powered by Stripe.</span></li>
+                                        <li class="flex items-start"><span class="text-[#06C167] font-bold mr-2 mt-1">✓</span><span><strong class="text-gray-800">Live Order Tracking:</strong> Real-time map view from the kitchen to your door.</span></li>
+                                    </ul>
+                                </div>
+                                <div class="h-80 bg-gray-800 rounded-lg flex items-center justify-center text-white p-4">
+                                    <p>Mobile App Mockup Area</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-panel hidden" id="restaurant-app-content">
+                            <div class="grid md:grid-cols-2 gap-8 items-center p-6">
+                                <div class="h-80 bg-gray-800 rounded-lg flex items-center justify-center text-white p-4 order-last md:order-first">
+                                    <p>Web/Tablet Dashboard Mockup Area</p>
+                                </div>
+                                <div class="bg-gray-100 rounded-lg p-6">
+                                    <h3 class="text-2xl font-bold mb-4">Empowering Restaurants</h3>
+                                    <ul class="space-y-3 text-gray-700">
+                                        <li class="flex items-start"><span class="text-[#06C167] font-bold mr-2 mt-1">✓</span><span><strong class="text-gray-800">Instant Order Alerts:</strong> A clear notification for every new order.</span></li>
+                                        <li class="flex items-start"><span class="text-[#06C167] font-bold mr-2 mt-1">✓</span><span><strong class="text-gray-800">Simple Status Updates:</strong> Manage the entire flow from "Preparing" to "Ready for Pickup."</span></li>
+                                        <li class="flex items-start"><span class="text-[#06C167] font-bold mr-2 mt-1">✓</span><span><strong class="text-gray-800">Menu & Hours Control:</strong> Easily toggle item availability and store hours.</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-panel hidden" id="driver-app-content">
+                            <div class="grid md:grid-cols-2 gap-8 items-center p-6">
+                                <div class="bg-gray-100 rounded-lg p-6">
+                                    <h3 class="text-2xl font-bold mb-4">Empowering Drivers</h3>
+                                    <ul class="space-y-3 text-gray-700">
+                                        <li class="flex items-start"><span class="text-[#06C167] font-bold mr-2 mt-1">✓</span><span><strong class="text-gray-800">Flexible Work:</strong> Go online to accept jobs anytime.</span></li>
+                                        <li class="flex items-start"><span class="text-[#06C167] font-bold mr-2 mt-1">✓</span><span><strong class="text-gray-800">Optimized Navigation:</strong> One-tap integration with Google Maps/Waze.</span></li>
+                                        <li class="flex items-start"><span class="text-[#06C167] font-bold mr-2 mt-1">✓</span><span><strong class="text-gray-800">Transparent Earnings:</strong> Track completed deliveries and earnings in real-time.</span></li>
+                                    </ul>
+                                </div>
+                                <div class="h-80 bg-gray-800 rounded-lg flex items-center justify-center text-white p-4">
+                                    <p>Driver App Mockup Area</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="model" class="py-20 md:py-28">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900">A Clear Path to Profitability</h2>
+                    <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">Our revenue model is straightforward, competitive, and built for scale with multiple streams for sustainable growth.</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8 text-center">
+                    <div class="p-8 bg-white rounded-2xl shadow-lg border-t-4 border-[#06C167]">
+                        <h3 class="text-2xl font-bold mb-3">Restaurant Commission</h3>
+                        <p class="text-5xl font-bold text-gray-900 mb-2">15-20%</p>
+                        <p class="text-gray-600">On each order's subtotal, providing value through our marketing and technology infrastructure.</p>
+                    </div>
+                    <div class="p-8 bg-white rounded-2xl shadow-lg border-t-4 border-[#06C167]">
+                        <h3 class="text-2xl font-bold mb-3">Customer Fees</h3>
+                        <p class="text-5xl font-bold text-gray-900 mb-2">✓</p>
+                        <p class="text-gray-600">A transparent delivery and service fee applied at checkout to cover operational and driver costs.</p>
+                    </div>
+                    <div class="p-8 bg-white rounded-2xl shadow-lg border-t-4 border-[#06C167]">
+                        <h3 class="text-2xl font-bold mb-3">Future Growth</h3>
+                        <p class="text-5xl font-bold text-gray-900 mb-2">→</p>
+                        <p class="text-gray-600">Post-MVP, we will explore promotions, premium subscriptions for restaurants, and data analytics services.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap" class="py-20 md:py-28 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900">Our Plan for the Next 12 Months</h2>
+                    <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">We have a clear, milestone-driven plan to take us from partnership to public launch and beyond. This roadmap visualizes our key activities over the coming year.</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="roadmap-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="partner" class="py-20 md:py-28 bg-gray-900 text-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold">Why Partner With Us?</h2>
+                    <p class="text-lg text-gray-300 mt-4 max-w-3xl mx-auto">We have a clear vision, a detailed plan, and a massive market opportunity. We are seeking a strategic partner to help us accelerate our launch and build the future of food, together.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
+                    <div class="bg-gray-800 p-8 rounded-2xl">
+                        <h3 class="text-3xl font-bold text-white mb-4">The Ask</h3>
+                        <p class="text-gray-300 text-lg">We are seeking:</p>
+                        <p class="text-2xl font-semibold text-[#06C167] mt-2">
+                           $150,000 in seed funding for development, marketing, and operations.
+                        </p>
+                        <p class="text-gray-400 mt-2">(Also open to strategic advice, industry connections, and expertise in logistics).</p>
+                    </div>
+                    <div class="bg-gray-800 p-8 rounded-2xl">
+                        <h3 class="text-3xl font-bold text-white mb-4">What We Offer</h3>
+                        <ul class="space-y-3 text-gray-300 text-lg">
+                            <li class="flex items-center"><span class="text-[#06C167] mr-3">▶</span> A significant equity stake in the company.</li>
+                            <li class="flex items-center"><span class="text-[#06C167] mr-3">▶</span> A position on our board of advisors.</li>
+                            <li class="flex items-center"><span class="text-[#06C167] mr-3">▶</span> The opportunity to shape the leading Halal food tech platform.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400">
+        <div class="container mx-auto px-6 py-12 text-center">
+            <h3 class="text-2xl font-bold text-white mb-2">Let's Connect</h3>
+            <p class="mb-6">Ready to build the future of food, together?</p>
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8">
+                <p><strong class="text-white">[Your Name]</strong>, Founder & CEO</p>
+                <p><a href="mailto:[your.email@example.com]" class="hover:text-[#06C167] transition-colors">[your.email@example.com]</a></p>
+                <p><a href="https://linkedin.com/in/yourprofile" target="_blank" class="hover:text-[#06C167] transition-colors">LinkedIn Profile</a></p>
+            </div>
+            <p class="mt-8 text-sm">&copy; 2025 Halal Online Store. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const currentValue = Math.floor(progress * (end - start) + start);
+                obj.innerHTML = currentValue.toLocaleString();
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                     obj.innerHTML = end.toLocaleString();
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        const marketValueObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = document.getElementById('market-value');
+                    animateValue(el, 0, 2, 1500);
+                    marketValueObserver.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+        marketValueObserver.observe(document.getElementById('market-value'));
+
+        const diagramNodes = document.querySelectorAll('.diagram-node');
+        const contentPanels = document.querySelectorAll('#diagram-content .content-panel');
+        diagramNodes.forEach(node => {
+            node.addEventListener('click', () => {
+                const targetId = node.dataset.target;
+
+                diagramNodes.forEach(n => n.classList.remove('selected'));
+                node.classList.add('selected');
+
+                contentPanels.forEach(panel => {
+                    if (panel.dataset.id === targetId) {
+                        panel.classList.remove('hidden');
+                    } else {
+                        panel.classList.add('hidden');
+                    }
+                });
+            });
+        });
+        document.querySelector('.diagram-node[data-target="platform"]').click();
+
+        const productTabs = document.querySelectorAll('.product-tab');
+        const productPanels = document.querySelectorAll('.product-panel');
+        productTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = tab.dataset.target;
+                
+                productTabs.forEach(t => {
+                    t.classList.remove('tab-active');
+                    t.classList.add('tab-inactive');
+                });
+                tab.classList.add('tab-active');
+                tab.classList.remove('tab-inactive');
+                
+                productPanels.forEach(panel => {
+                    if (panel.id === target + '-content') {
+                        panel.classList.remove('hidden');
+                    } else {
+                        panel.classList.add('hidden');
+                    }
+                });
+            });
+        });
+
+        const roadmapCtx = document.getElementById('roadmap-chart').getContext('2d');
+        const roadmapData = {
+            labels: [
+                'Finalize Partnership & Funding', 
+                'Complete UI/UX Design',
+                'Full-Stack MVP Development', 
+                'Onboard Restaurant Partners',
+                'Alpha & Beta Testing',
+                'Public Launch in Target City', 
+                'Begin Marketing & Driver Recruitment',
+            ],
+            datasets: [{
+                label: 'Timeline',
+                data: [
+                    [new Date('2025-07-01').getTime(), new Date('2025-09-30').getTime()],
+                    [new Date('2025-08-01').getTime(), new Date('2025-09-30').getTime()],
+                    [new Date('2025-10-01').getTime(), new Date('2026-01-31').getTime()],
+                    [new Date('2026-01-01').getTime(), new Date('2026-03-31').getTime()],
+                    [new Date('2026-02-01').getTime(), new Date('2026-03-31').getTime()],
+                    [new Date('2026-04-01').getTime(), new Date('2026-06-30').getTime()],
+                    [new Date('2026-05-01').getTime(), new Date('2026-06-30').getTime()],
+                ],
+                backgroundColor: '#06C167',
+                borderColor: '#059669',
+                borderWidth: 1,
+                borderRadius: 4,
+                borderSkipped: false,
+            }]
+        };
+
+        new Chart(roadmapCtx, {
+            type: 'bar',
+            data: roadmapData,
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const startDate = new Date(context.raw[0]).toLocaleDateString();
+                                const endDate = new Date(context.raw[1]).toLocaleDateString();
+                                return `${context.dataset.label}: ${startDate} - ${endDate}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'quarter',
+                            tooltipFormat: 'MMM yyyy',
+                            displayFormats: {
+                                quarter: 'QQQ yyyy'
+                            }
+                        },
+                        min: new Date('2025-07-01').getTime(),
+                        max: new Date('2026-07-01').getTime(),
+                        title: {
+                            display: true,
+                            text: 'Timeline'
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('main > section');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.5
+        };
+
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    navLinks.forEach(link => {
+                        link.classList.remove('active-nav');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active-nav');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+    });
+    </script>
+</body>
+</html>
